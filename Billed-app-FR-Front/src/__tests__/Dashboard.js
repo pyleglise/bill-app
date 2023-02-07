@@ -77,17 +77,72 @@ describe('Given I am connected as an Admin', () => {
       expect(handleShowTickets1).toHaveBeenCalled()
       await waitFor(() => screen.getByTestId(`open-bill47qAXb6fIm2zOKkLzMro`) )
       expect(screen.getByTestId(`open-bill47qAXb6fIm2zOKkLzMro`)).toBeTruthy()
+      expect(icon1.getAttribute('style')).toContain('rotate(0deg)')
+
       icon2.addEventListener('click', handleShowTickets2)
       userEvent.click(icon2)
       expect(handleShowTickets2).toHaveBeenCalled()
       await waitFor(() => screen.getByTestId(`open-billUIUZtnPQvnbFnB0ozvJh`) )
       expect(screen.getByTestId(`open-billUIUZtnPQvnbFnB0ozvJh`)).toBeTruthy()
+      expect(icon2.getAttribute('style')).toContain('rotate(0deg)')
 
       icon3.addEventListener('click', handleShowTickets3)
       userEvent.click(icon3)
       expect(handleShowTickets3).toHaveBeenCalled()
       await waitFor(() => screen.getByTestId(`open-billBeKy5Mo4jkmdfPGYpTxZ`) )
       expect(screen.getByTestId(`open-billBeKy5Mo4jkmdfPGYpTxZ`)).toBeTruthy()
+      expect(icon3.getAttribute('style')).toContain('rotate(0deg)')
+    })
+  })
+
+  describe('When I am on Dashboard page and I click 2 times on arrow', () => {
+    test('Then, arrow should go back to normal', async () => {
+
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Admin'
+      }))
+
+      const dashboard = new Dashboard({
+        document, onNavigate, store: null, bills:bills, localStorage: window.localStorage
+      })
+      document.body.innerHTML = DashboardUI({ data: { bills } })
+
+      const handleShowTickets1 = jest.fn((e) => dashboard.handleShowTickets(e, bills, 1))
+      const handleShowTickets2 = jest.fn((e) => dashboard.handleShowTickets(e, bills, 2))
+      const handleShowTickets3 = jest.fn((e) => dashboard.handleShowTickets(e, bills, 3))
+
+      const icon1 = screen.getByTestId('arrow-icon1')
+      const icon2 = screen.getByTestId('arrow-icon2')
+      const icon3 = screen.getByTestId('arrow-icon3')
+
+      icon1.addEventListener('click', handleShowTickets1)
+      userEvent.click(icon1)
+      await waitFor(() => screen.getByTestId('arrow-icon1') )
+    
+      userEvent.click(icon1)
+      await waitFor(() => screen.getByTestId('arrow-icon1') )
+      expect(screen.getByTestId('arrow-icon1').getAttribute('style')).toContain('rotate(90deg)')
+
+      icon2.addEventListener('click', handleShowTickets2)
+      userEvent.click(icon2)
+      await waitFor(() => screen.getByTestId('arrow-icon2'))
+      
+      userEvent.click(icon2)
+      await waitFor(() => screen.getByTestId('arrow-icon2'))
+      expect(screen.getByTestId('arrow-icon2').getAttribute('style')).toContain('rotate(90deg)')
+
+      icon3.addEventListener('click', handleShowTickets3)
+      userEvent.click(icon3)
+      await waitFor(() => screen.getByTestId('arrow-icon3'))
+
+      userEvent.click(icon3)
+      await waitFor(() => screen.getByTestId('arrow-icon3'))
+      expect(screen.getByTestId('arrow-icon3').getAttribute('style')).toContain('rotate(90deg)')
     })
   })
 
@@ -296,7 +351,7 @@ describe("Given I am a user connected as Admin", () => {
             return Promise.reject(new Error("Erreur 500"))
           }
         }})
-
+      
       window.onNavigate(ROUTES_PATH.Dashboard)
       await new Promise(process.nextTick);
       const message = await screen.getByText(/Erreur 500/)
