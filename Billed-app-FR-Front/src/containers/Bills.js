@@ -23,8 +23,9 @@ export default class {
   handleClickIconEye = (icon) => {
     const billUrl = icon.getAttribute("data-bill-url")
     const imgWidth = Math.floor($('#modaleFile').width() * 0.5)
-    $('#modaleFile').find(".modal-body").html(`<div style='text-align: center;' class="bill-proof-container"><img width=${imgWidth} src=${billUrl} alt="Bill" /></div>`)
+    $('#modaleFile').find(".modal-body").html(`<div style='text-align: center;' class="bill-proof-container"><img data-testid="open-${billUrl}" width=${imgWidth} src=${billUrl} alt="Bill" /></div>`)
     $('#modaleFile').modal('show')
+    // console.log('handleClickIconEye appelé !')
   }
 
   getBills = () => {
@@ -35,7 +36,7 @@ export default class {
       // .sort((d1, d2) => new Date(d1.date).getTime() - new Date(d2.date).getTime())
       .then(snapshot => {
         const bills = snapshot
-        bills.sort((d2, d1) => new Date(d1.date).getTime() - new Date(d2.date).getTime()).map(doc => {
+        .sort((d2, d1) => new Date(d1.date).getTime() - new Date(d2.date).getTime()).map(doc => {
             try {
               return {
                 ...doc,
@@ -46,11 +47,11 @@ export default class {
               // if for some reason, corrupted data was introduced, we manage here failing formatDate function
               // log the error and return unformatted date in that case
               // console.log(e,'for',doc)
-              return {
-                ...doc,
-                date: doc.date,
-                status: formatStatus(doc.status)
-              }
+                return {
+                  ...doc,
+                  date: doc.date,
+                  status: formatStatus(doc.status)
+                }
             }
           })
           // console.log('length', bills.length)

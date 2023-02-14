@@ -1,0 +1,25 @@
+module.exports = {
+    globals: {
+    window: true,
+    browser: true,
+    node: true,
+    document: true,
+  },
+  env: {
+    browser: true,
+    commonjs: true,
+    es2021: true,
+    node:true,
+  },
+  extends: [
+    'airbnb-base',
+    'standard',
+  ],
+  parserOptions: {
+    parser: 'babel-eslint',
+    // ecmaVersion: 13,
+  },
+  rules: {
+  },
+  ignorePatterns: ['tests', 'setupTests.js', '*.test.js', 'migrations', 'models'],
+}
