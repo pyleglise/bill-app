@@ -14,9 +14,14 @@
       "!**/assets/**",
       "!**/external/**",
       "!**/fixtures/**",
-      "!**/lcov-report/**"
+      "!**/lcov-report/**",
+      "!**/.eslintrc.js"
+    ],
+    "testPathIgnorePatterns" : [
+      "Billed-app-FR-Front/.eslintrc.js"
     ]
   },
+  
   "type": "module",
   "dependencies": {
     "bootstrap": "^5.2.3",
