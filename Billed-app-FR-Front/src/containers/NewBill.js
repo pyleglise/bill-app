@@ -58,7 +58,8 @@ export default class NewBill {
     if (!this.hasValidExtension(extension)) {
       errorExtension.classList.add('show-error')
       errorExtension.classList.remove('hide-error')
-      return('error : wrong extension')
+      this.document.querySelector(`input[data-testid="file"]`).value=null
+      return
     }
     formData.append('file', file)
     formData.append('email', email)
